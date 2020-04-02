@@ -44,6 +44,12 @@
 #*.png   binary
 #*.gif   binary
 
+#Treat Click-Once files as binary so that git doesn't mess up with line carries
+#and so on
+*.manifest binary
+*.application binary
+*.deploy binary
+
 ###############################################################################
 # diff behavior for common document formats
 # 
