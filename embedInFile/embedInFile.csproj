@@ -264,9 +264,9 @@
     <None Include="client-secret.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="embedinfile-db8ffaf7c414.p12">
+    <Content Include="embedinfile-db8ffaf7c414.p12">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="embedInFile_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
