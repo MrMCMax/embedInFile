@@ -20,7 +20,7 @@ namespace embedInFile
 
         void removeAll();
 
-        void removeLink(string path);
+        bool removeLink(string path);
 
         void listFiles();
     }

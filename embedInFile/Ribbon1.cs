@@ -39,6 +39,11 @@ namespace embedInFile
                 {
                     await driveEmbedding.uploadLink(cc.Range, path, docName);
                     cc.LockContents = true;
+                    if (cc.Range.Hyperlinks.Count > 0) //A good link has been created
+                    {
+                        Globals.ThisAddIn.addNewLink(Path.GetFileName(path), 
+                            cc.Range.Hyperlinks[1].Address);
+                    }
                 });
             }
             
@@ -73,7 +78,21 @@ namespace embedInFile
             }
         }
 
-        private void debug_list_Click(object sender, RibbonControlEventArgs e)
+        public IDriveConnection getDriveEmbedding()
+        {
+            if (driveEmbedding == null)
+            {
+                driveEmbedding = new DriveEmbedding();
+            }
+            return driveEmbedding;
+        }
+
+        private void listAllLinks_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.listAllLinks();
+        }
+
+        private void listFiles_Click(object sender, RibbonControlEventArgs e)
         {
             if (driveEmbedding == null)
             {
@@ -82,7 +101,7 @@ namespace embedInFile
             driveEmbedding.listFiles();
         }
 
-        private void deleteSelectedButton_Click(object sender, RibbonControlEventArgs e)
+        private void deleteSelected_Click(object sender, RibbonControlEventArgs e)
         {
             if (driveEmbedding == null)
             {
@@ -91,13 +110,18 @@ namespace embedInFile
             driveEmbedding.removeLink(Globals.ThisAddIn.Application.Selection.FormattedText.Text);
         }
 
-        public IDriveConnection getDriveEmbedding()
+        private void listAssembly_Click(object sender, RibbonControlEventArgs e)
         {
-            if (driveEmbedding == null)
-            {
-                driveEmbedding = new DriveEmbedding();
-            }
-            return driveEmbedding;
+            //Get the assembly information
+            System.Reflection.Assembly assemblyInfo = System.Reflection.Assembly.GetExecutingAssembly();
+
+            //Location is where the assembly is run from 
+            string assemblyLocation = assemblyInfo.Location;
+
+            //CodeBase is the location of the ClickOnce deployment files
+            Uri uriCodeBase = new Uri(assemblyInfo.CodeBase);
+            string ClickOnceLocation = Path.GetDirectoryName(uriCodeBase.LocalPath.ToString());
+            Globals.ThisAddIn.sayWord(ClickOnceLocation+"\r\n");
         }
     }
 }

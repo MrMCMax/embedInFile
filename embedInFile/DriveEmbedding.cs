@@ -32,6 +32,8 @@ namespace embedInFile
         private string rootID;
         private ServiceAccountCredential credential;
 
+        
+
         public DriveEmbedding()
         {
 
@@ -41,15 +43,16 @@ namespace embedInFile
             throw new NotImplementedException();
         }
 
-        public void removeLink(string path)
+        public bool removeLink(string path)
         {
             try
             {
                 start();
-                DriveConnection.deleteFile(driveService, path);
+                return DriveConnection.deleteFile(driveService, path);
             } catch (Exception e)
             {
                 MessageBox.Show("An error happened: " + e.ToString(), "Error", MessageBoxButtons.OK);
+                return false;
             }
         }
         
@@ -127,7 +130,7 @@ namespace embedInFile
                 var file = request.ResponseBody;
                 object URL = DriveConnection.setSharedURL(driveService, file.Id);
                 //cc.Text = (string) URL;
-                cc.Hyperlinks.Add(cc, ref URL, System.Type.Missing, name, name);
+                cc.Hyperlinks.Add(cc, ref URL, System.Type.Missing, Path.GetFileName(name), Path.GetFileName(name));
                 //cc.PlaceholderText = (string) URL;
                 //cc.LockContents = true;
             } else if (finalResult == UploadStatus.Failed)

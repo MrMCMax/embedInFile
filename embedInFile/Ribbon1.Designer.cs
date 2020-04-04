@@ -39,11 +39,15 @@
             this.insertButton = this.Factory.CreateRibbonButton();
             this.deleteAllButton = this.Factory.CreateRibbonButton();
             this.group2 = this.Factory.CreateRibbonGroup();
-            this.debug_list = this.Factory.CreateRibbonButton();
-            this.deleteSelectedButton = this.Factory.CreateRibbonButton();
+            this.listAllLinks = this.Factory.CreateRibbonButton();
+            this.group3 = this.Factory.CreateRibbonGroup();
+            this.listFiles = this.Factory.CreateRibbonButton();
+            this.deleteSelected = this.Factory.CreateRibbonButton();
+            this.listAssembly = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
+            this.group3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
@@ -51,6 +55,7 @@
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.group1);
             this.tab1.Groups.Add(this.group2);
+            this.tab1.Groups.Add(this.group3);
             this.tab1.Label = "Audio+";
             this.tab1.Name = "tab1";
             // 
@@ -58,7 +63,7 @@
             // 
             this.group1.Items.Add(this.insertButton);
             this.group1.Items.Add(this.deleteAllButton);
-            this.group1.Label = "Audio+";
+            this.group1.Label = "Este documento";
             this.group1.Name = "group1";
             // 
             // insertButton
@@ -69,28 +74,47 @@
             // 
             // deleteAllButton
             // 
-            this.deleteAllButton.Label = "Eliminar todos...";
+            this.deleteAllButton.Label = "Eliminar links";
             this.deleteAllButton.Name = "deleteAllButton";
             this.deleteAllButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.deleteAll_Click);
             // 
             // group2
             // 
-            this.group2.Items.Add(this.debug_list);
-            this.group2.Items.Add(this.deleteSelectedButton);
-            this.group2.Label = "debug";
+            this.group2.Items.Add(this.listAllLinks);
+            this.group2.Label = "Todos los documentos";
             this.group2.Name = "group2";
             // 
-            // debug_list
+            // listAllLinks
             // 
-            this.debug_list.Label = "[DEBUG] listFiles";
-            this.debug_list.Name = "debug_list";
-            this.debug_list.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.debug_list_Click);
+            this.listAllLinks.Label = "Ver todos los links...";
+            this.listAllLinks.Name = "listAllLinks";
+            this.listAllLinks.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.listAllLinks_Click);
             // 
-            // deleteSelectedButton
+            // group3
             // 
-            this.deleteSelectedButton.Label = "deleteSelected";
-            this.deleteSelectedButton.Name = "deleteSelectedButton";
-            this.deleteSelectedButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.deleteSelectedButton_Click);
+            this.group3.Items.Add(this.listFiles);
+            this.group3.Items.Add(this.deleteSelected);
+            this.group3.Items.Add(this.listAssembly);
+            this.group3.Label = "Debug";
+            this.group3.Name = "group3";
+            // 
+            // listFiles
+            // 
+            this.listFiles.Label = "listFiles";
+            this.listFiles.Name = "listFiles";
+            this.listFiles.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.listFiles_Click);
+            // 
+            // deleteSelected
+            // 
+            this.deleteSelected.Label = "deleteSelected";
+            this.deleteSelected.Name = "deleteSelected";
+            this.deleteSelected.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.deleteSelected_Click);
+            // 
+            // listAssembly
+            // 
+            this.listAssembly.Label = "listAssembly";
+            this.listAssembly.Name = "listAssembly";
+            this.listAssembly.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.listAssembly_Click);
             // 
             // Ribbon1
             // 
@@ -104,6 +128,8 @@
             this.group1.PerformLayout();
             this.group2.ResumeLayout(false);
             this.group2.PerformLayout();
+            this.group3.ResumeLayout(false);
+            this.group3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -114,9 +140,12 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton insertButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteAllButton;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton debug_list;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteSelectedButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton listAllLinks;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group3;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton listFiles;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteSelected;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton listAssembly;
     }
 
     partial class ThisRibbonCollection

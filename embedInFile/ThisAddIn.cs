@@ -8,19 +8,35 @@ using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Word;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace embedInFile
 {
     public partial class ThisAddIn
     {
-        
+        private Dictionary<string, string> links;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            string json = Properties.Settings.Default.links;
+            if (json == "")
+            {
+                links = new Dictionary<string, string>();
+            } else
+            {
+                links = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            }
             Globals.Ribbons.Ribbon1.insertButton.Enabled = false;
             Globals.Ribbons.Ribbon1.deleteAllButton.Enabled = false;
             this.Application.DocumentChange += Application_DocumentChange;
         }
-
+        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
+        {
+            string json = JsonConvert.SerializeObject(links);
+            
+            Properties.Settings.Default.links = json;
+        }
+        
         private void Application_DocumentChange()
         {
             Globals.Ribbons.Ribbon1.insertButton.Enabled = true;
@@ -40,19 +56,56 @@ namespace embedInFile
             t.Start();
         }
 
+        public void addNewLink(string name, string path)
+        {
+            if (links.ContainsKey(name) && links[name].Equals(path)) return;
+            else
+            {
+                links.Add(name, path);
+                saveLinks();
+            }
+        }
+
+        public void deleteLink(string name)
+        {
+            if (links.ContainsKey(name))
+            {
+                links.Remove(name);
+                saveLinks();
+            }
+        }
+
+        private void saveLinks()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                string json = JsonConvert.SerializeObject(links);
+                Properties.Settings.Default.links = json;
+            });
+        }
+
+        public void listAllLinks()
+        {
+            foreach (KeyValuePair<string, string> link in links)
+            {
+                sayWord($"Name: {link.Key}, URL: {link.Value}\r\n");
+            }
+        }
+
         private void onContentControlBeforeDelete(Word.ContentControl OldContentControl, bool InUndoRedo)
         {
             if (OldContentControl.Range.Hyperlinks.Count > 0) //There's a link to remove
             {
                 MessageBox.Show("Drive content will be deleted", "Content control deleted", MessageBoxButtons.OK);
+                string name = OldContentControl.Range.Hyperlinks[1].TextToDisplay;
                 string url = OldContentControl.Range.Hyperlinks[1].Address.Substring(31);
-                Globals.Ribbons.Ribbon1.getDriveEmbedding().removeLink(url);
+                if (Globals.Ribbons.Ribbon1.getDriveEmbedding().removeLink(url))
+                {
+                    deleteLink(name);
+                }
             }
         }
 
-        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
-        {
-        }
 
         public void sayWord(string word)
         {

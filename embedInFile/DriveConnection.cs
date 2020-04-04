@@ -209,17 +209,19 @@ namespace embedInFile
             return new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read);
         }
 
-        public static void deleteFile(DriveService service, string id)
+        public static bool deleteFile(DriveService service, string id)
         {
             try
             {
                 var newid = id.Trim();
                 service.Files.Delete(newid).Execute();
                 MessageBox.Show("Deletion successful", "Deletion of file", MessageBoxButtons.OK);
+                return true;
             }
             catch (Exception e)
             {
                 MessageBox.Show("Error while deleting: " + e.ToString(), "Error", MessageBoxButtons.OK);
+                return false;
             }
         }
 

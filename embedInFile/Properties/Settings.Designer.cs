@@ -34,5 +34,17 @@ namespace embedInFile.Properties {
                 this["defaultDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string links {
+            get {
+                return ((string)(this["links"]));
+            }
+            set {
+                this["links"] = value;
+            }
+        }
     }
 }
