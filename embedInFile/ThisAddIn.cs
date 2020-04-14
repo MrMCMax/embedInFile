@@ -9,6 +9,7 @@ using Microsoft.Office.Tools.Word;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace embedInFile
 {
@@ -18,14 +19,7 @@ namespace embedInFile
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            string json = Properties.Settings.Default.links;
-            if (json == "")
-            {
-                links = new Dictionary<string, string>();
-            } else
-            {
-                links = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-            }
+            loadLinks();
             Globals.Ribbons.Ribbon1.insertButton.Enabled = false;
             Globals.Ribbons.Ribbon1.deleteAllButton.Enabled = false;
             this.Application.DocumentChange += Application_DocumentChange;
@@ -45,6 +39,19 @@ namespace embedInFile
             {
                 this.Application.ActiveDocument.ContentControlBeforeDelete += onContentControlBeforeDelete;
                 this.Application.ActiveDocument.ContentControlBeforeContentUpdate += onContentControlBeforeContentUpdate;
+            }
+        }
+
+        private void loadLinks()
+        {
+            string json = File.ReadAllText(getClickOnceLocation() + "\\" + "links.json");
+            if (json == "")
+            {
+                links = new Dictionary<string, string>();
+            }
+            else
+            {
+                links = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
             }
         }
 
@@ -80,7 +87,7 @@ namespace embedInFile
             Task.Factory.StartNew(() =>
             {
                 string json = JsonConvert.SerializeObject(links);
-                Properties.Settings.Default.links = json;
+                File.WriteAllText(getClickOnceLocation() + "\\" + "links.json", json);
             });
         }
 
@@ -203,6 +210,21 @@ namespace embedInFile
                 return number;
             }
         }
+
+        public string getClickOnceLocation()
+        {
+            //Get the assembly information
+            System.Reflection.Assembly assemblyInfo = System.Reflection.Assembly.GetExecutingAssembly();
+
+            //Location is where the assembly is run from 
+            string assemblyLocation = assemblyInfo.Location;
+
+            //CodeBase is the location of the ClickOnce deployment files
+            Uri uriCodeBase = new Uri(assemblyInfo.CodeBase);
+            string ClickOnceLocation = Path.GetDirectoryName(uriCodeBase.LocalPath.ToString());
+            return ClickOnceLocation;
+        }
+
         #region Código generado por VSTO
 
         /// <summary>

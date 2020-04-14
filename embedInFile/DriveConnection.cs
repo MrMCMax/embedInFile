@@ -27,7 +27,8 @@ namespace embedInFile
         /// </summary>
         public static DriveService startServerConnection(ref string[] Scopes, string credentialsPath, string appName, out ServiceAccountCredential credential)
         {
-            //Service account certificate
+            //Globals.ThisAddIn.sayWord(credentialsPath + "\r\n");
+
             X509Certificate2 certificate =
                     new X509Certificate2(credentialsPath, "notasecret", X509KeyStorageFlags.Exportable);
             //Get credentials

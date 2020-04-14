@@ -30,7 +30,7 @@ namespace embedInFile
             if (paths == null) return;
             if (driveEmbedding == null)
             {
-                driveEmbedding = new DriveEmbedding();
+                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
             }
             foreach (string path in paths)
             {
@@ -82,7 +82,7 @@ namespace embedInFile
         {
             if (driveEmbedding == null)
             {
-                driveEmbedding = new DriveEmbedding();
+                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
             }
             return driveEmbedding;
         }
@@ -96,7 +96,7 @@ namespace embedInFile
         {
             if (driveEmbedding == null)
             {
-                driveEmbedding = new DriveEmbedding();
+                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
             }
             driveEmbedding.listFiles();
         }
@@ -105,7 +105,7 @@ namespace embedInFile
         {
             if (driveEmbedding == null)
             {
-                driveEmbedding = new DriveEmbedding();
+                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
             }
             driveEmbedding.removeLink(Globals.ThisAddIn.Application.Selection.FormattedText.Text);
         }

@@ -32,11 +32,15 @@ namespace embedInFile
         private string rootID;
         private ServiceAccountCredential credential;
 
-        
+        private string deployLocation;
 
-        public DriveEmbedding()
+        /// <summary>
+        /// Constructor for the driveEmbedding object. Needs the path where credentials are located on deployment.
+        /// </summary>
+        /// <param name="deployLocation"></param>
+        public DriveEmbedding(string deployLocation)
         {
-
+            this.deployLocation = deployLocation;
         }
         public void removeAll()
         {
@@ -76,7 +80,7 @@ namespace embedInFile
             {
                 //Will set this.driveService and authenticate
                 driveService = DriveConnection.startServerConnection(ref Scopes,
-                    "embedinfile-db8ffaf7c414.p12",
+                    deployLocation + "\\" + "embedinfile-db8ffaf7c414.p12",
                     "embedInFile", out credential);
 
                 //If root folder has not been created for this user, create it
@@ -130,7 +134,7 @@ namespace embedInFile
                 var file = request.ResponseBody;
                 object URL = DriveConnection.setSharedURL(driveService, file.Id);
                 //cc.Text = (string) URL;
-                cc.Hyperlinks.Add(cc, ref URL, System.Type.Missing, Path.GetFileName(name), Path.GetFileName(name));
+                cc.Hyperlinks.Add(cc, ref URL, System.Type.Missing, Path.GetFileName(fileName), Path.GetFileName(fileName));
                 //cc.PlaceholderText = (string) URL;
                 //cc.LockContents = true;
             } else if (finalResult == UploadStatus.Failed)
