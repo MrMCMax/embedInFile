@@ -156,7 +156,7 @@ namespace embedInFile
                 URL = DriveConnection.setSharedURL(driveService, file.Id);
                 object link = URL;
                 //create hyperlink in the content control
-                cc.Hyperlinks.Add(cc, ref link, System.Type.Missing, name, name);
+                cc.Hyperlinks.Add(cc, ref link, System.Type.Missing, name, URL);
             }
             else if (finalResult == UploadStatus.Failed)
             {

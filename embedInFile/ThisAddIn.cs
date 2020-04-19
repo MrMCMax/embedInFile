@@ -50,7 +50,9 @@ namespace embedInFile
             this.Application.DocumentBeforeSave += Application_DocumentBeforeSave;
             this.Application.DocumentBeforeClose += Application_DocumentBeforeClose;
             this.Application.DocumentOpen += Application_DocumentOpen;
+            
         }
+
 
         private void Application_DocumentOpen(Word.Document Doc)
         {
@@ -94,7 +96,6 @@ namespace embedInFile
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
-
         }
 
         private void Application_DocumentBeforeSave(Word.Document Doc, ref bool SaveAsUI, ref bool Cancel)
