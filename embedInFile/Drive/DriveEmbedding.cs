@@ -59,18 +59,26 @@ namespace embedInFile
                 return false;
             }
         }
-        
-        public async Task uploadLink(Word.Range cc, string path, string documentName)
+        /// <summary>
+        /// Uploads a file to drive and creates a link to it, displayed in cc.
+        /// </summary>
+        /// <param name="cc">The word content control to write the link to</param>
+        /// <param name="absolutePath">The absolute path to the file to upload</param>
+        /// <param name="name">The name of the file</param>
+        /// <returns>true if the operation was successful, false otherwise</returns>
+        public async Task<String> uploadLink(Word.Range cc, string absolutePath, string name)
         {
             try
             {
                 start();
 
-                FileStream inputfile = DriveConnection.getFile(path); //File to upload
-                await uploadLargeFileAsync(cc, inputfile, path, documentName);
+                FileStream inputfile = DriveConnection.getFile(absolutePath); //File to upload
+                string result = await uploadLargeFileAsync(cc, inputfile, absolutePath, name);
+                return result;
             } catch (Exception e)
             {
                 MessageBox.Show("An error happened: " + e.ToString(), "Error", MessageBoxButtons.OK);
+                return "";
             }
         }
 
@@ -109,45 +117,57 @@ namespace embedInFile
             }
         }
 
-        private async Task uploadLargeFileAsync(Word.Range cc, FileStream stream, string fileName, string docName)
+        /// <summary>
+        /// uploads a potentially large file to google drive and stores the link in cc.
+        /// </summary>
+        /// <param name="cc"></param>
+        /// <param name="stream"></param>
+        /// <param name="fileName"></param>
+        /// <param name="docName"></param>
+        /// <returns></returns>
+        private async Task<String> uploadLargeFileAsync(Word.Range cc, FileStream stream,
+            string absolutePath, string name)
         {
-            string name = docName + "_" + Path.GetFileName(fileName);
-            string extension = Path.GetExtension(fileName);
-
+            //Create drive File object with the file name
             var fileMetadata = new Google.Apis.Drive.v3.Data.File()
             {
                 Name = name
             };
+            //Create the request for uploading a large audio file
             FilesResource.CreateMediaUpload request;
             request = driveService.Files.Create(
                 fileMetadata, stream, "audio/mpeg");
             request.Fields = "id";
+            //Set the progress change method
             request.ProgressChanged += (obj) => { string t = $"Uploading... {obj.BytesSent / stream.Length}%";
                 cc.Text = t;
-                //cc.PlaceholderText = t;
             };
+            string URL = "";
+            //Try to upload. Get result
             var result = await request.UploadAsync();
+            //If the async method returned without completing the request, handleUpload will take care of it
+            //and return the final result
             UploadStatus finalResult = await handleUpload(request, result.Status);
-            //var finalResult = result.Status;
             if (finalResult == UploadStatus.Completed)
             {
+                //The file was successfully uploaded. Retrieve the file
                 var file = request.ResponseBody;
-                object URL = DriveConnection.setSharedURL(driveService, file.Id);
-                //cc.Text = (string) URL;
-                cc.Hyperlinks.Add(cc, ref URL, System.Type.Missing, Path.GetFileName(fileName), Path.GetFileName(fileName));
-                //cc.PlaceholderText = (string) URL;
-                //cc.LockContents = true;
-            } else if (finalResult == UploadStatus.Failed)
+                //Set its permissions (anyone can read with URL) and retrieve its URL
+                URL = DriveConnection.setSharedURL(driveService, file.Id);
+                object link = URL;
+                //create hyperlink in the content control
+                cc.Hyperlinks.Add(cc, ref link, System.Type.Missing, name, name);
+            }
+            else if (finalResult == UploadStatus.Failed)
             {
                 cc.Text = "Upload failed :(";
-                //cc.PlaceholderText = "Upload failed :(";
                 MessageBox.Show("Response: " + "\r\n", "Error", MessageBoxButtons.OK);
-                //cc.LockContents = true;
-            } else
+            }
+            else
             {
                 Globals.ThisAddIn.sayWord("Recursion not happening");
             }
-            //return setSharedURL(service, "ID DEL ARCHIVO SUBIDO");
+            return URL;
         }
 
         private async Task<UploadStatus> handleUpload(FilesResource.CreateMediaUpload request, UploadStatus status)

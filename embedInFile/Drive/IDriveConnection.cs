@@ -15,8 +15,8 @@ namespace embedInFile
         /// </summary>
         /// <param name="path">path to the file to upload</param>
         /// <param name="documentName">name of the document to insert into</param>
-        /// <returns>The public URL linked to the file</returns>
-        Task uploadLink(Word.Range cc, string path, string documentName);
+        /// <returns>The public URL linked to the file or the empty string if it failed</returns>
+        Task<String> uploadLink(Word.Range cc, string path, string documentName);
 
         void removeAll();
 

@@ -242,9 +242,9 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="DriveConnection.cs" />
-    <Compile Include="DriveEmbedding.cs" />
-    <Compile Include="IDriveConnection.cs" />
+    <Compile Include="Drive\DriveConnection.cs" />
+    <Compile Include="Drive\DriveEmbedding.cs" />
+    <Compile Include="Drive\IDriveConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -257,7 +257,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Ribbon1.resx">
+    <EmbeddedResource Include="WordInterop\Ribbon1.resx">
       <DependentUpon>Ribbon1.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
@@ -268,6 +268,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="embedInFile_TemporaryKey.pfx" />
+    <Content Include="IDNumber.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="links.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -281,10 +284,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Ribbon1.cs">
+    <Compile Include="WordInterop\Link.cs" />
+    <Compile Include="WordInterop\Ribbon1.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Ribbon1.Designer.cs">
+    <Compile Include="WordInterop\Ribbon1.Designer.cs">
       <DependentUpon>Ribbon1.cs</DependentUpon>
     </Compile>
     <Compile Include="ThisAddIn.cs">
@@ -303,16 +307,16 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>embedInFile_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>0D7A4DE777C4A6AEFFFCD936DC9329F2B1B412E0</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
+    <ManifestCertificateThumbprint>9E4C9CC556F1D3C2270F2A00DF58AF62D69BED16</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

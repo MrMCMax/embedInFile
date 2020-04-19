@@ -44,6 +44,11 @@
             this.listFiles = this.Factory.CreateRibbonButton();
             this.deleteSelected = this.Factory.CreateRibbonButton();
             this.listAssembly = this.Factory.CreateRibbonButton();
+            this.addProperty = this.Factory.CreateRibbonButton();
+            this.listProperties = this.Factory.CreateRibbonButton();
+            this.addCC = this.Factory.CreateRibbonButton();
+            this.addVariable = this.Factory.CreateRibbonButton();
+            this.listVariables = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -95,6 +100,11 @@
             this.group3.Items.Add(this.listFiles);
             this.group3.Items.Add(this.deleteSelected);
             this.group3.Items.Add(this.listAssembly);
+            this.group3.Items.Add(this.addProperty);
+            this.group3.Items.Add(this.listProperties);
+            this.group3.Items.Add(this.addCC);
+            this.group3.Items.Add(this.addVariable);
+            this.group3.Items.Add(this.listVariables);
             this.group3.Label = "Debug";
             this.group3.Name = "group3";
             // 
@@ -115,6 +125,36 @@
             this.listAssembly.Label = "listAssembly";
             this.listAssembly.Name = "listAssembly";
             this.listAssembly.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.listAssembly_Click);
+            // 
+            // addProperty
+            // 
+            this.addProperty.Label = "addProperty";
+            this.addProperty.Name = "addProperty";
+            this.addProperty.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.AddProperty_Click);
+            // 
+            // listProperties
+            // 
+            this.listProperties.Label = "listProperties";
+            this.listProperties.Name = "listProperties";
+            this.listProperties.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ListProperties_Click);
+            // 
+            // addCC
+            // 
+            this.addCC.Label = "addCC";
+            this.addCC.Name = "addCC";
+            this.addCC.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.AddCC_Click);
+            // 
+            // addVariable
+            // 
+            this.addVariable.Label = "addVariable";
+            this.addVariable.Name = "addVariable";
+            this.addVariable.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button1_Click);
+            // 
+            // listVariables
+            // 
+            this.listVariables.Label = "listVariables";
+            this.listVariables.Name = "listVariables";
+            this.listVariables.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ListVariables_Click);
             // 
             // Ribbon1
             // 
@@ -146,6 +186,11 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton listFiles;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton deleteSelected;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton listAssembly;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton addProperty;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton listProperties;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton addCC;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton addVariable;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton listVariables;
     }
 
     partial class ThisRibbonCollection

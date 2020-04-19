@@ -12,41 +12,24 @@ namespace embedInFile
 {
     public partial class Ribbon1
     {
-        private IDriveConnection driveEmbedding;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
 
         }
-
+        /// <summary>
+        /// Full functionality described in the API
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void insertButton_Click(object sender, RibbonControlEventArgs e)
         {
-            Word.Document currentDoc;
-            if ((currentDoc = Globals.ThisAddIn.getCurrentDocument()) == null)
+            if (Globals.ThisAddIn.activeDoc() == null)
             {
                 return;
             }
-            string docName = currentDoc.Name;
-            string[] paths = selectFiles();
+            string[] paths = selectFiles(); //OpenFileDialog returns the files selected by the user
             if (paths == null) return;
-            if (driveEmbedding == null)
-            {
-                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
-            }
-            foreach (string path in paths)
-            {
-                Tools.ContentControl cc = Globals.ThisAddIn.createDriveContentControl();
-                System.Threading.Tasks.Task.Factory.StartNew(async () =>
-                {
-                    await driveEmbedding.uploadLink(cc.Range, path, docName);
-                    cc.LockContents = true;
-                    if (cc.Range.Hyperlinks.Count > 0) //A good link has been created
-                    {
-                        Globals.ThisAddIn.addNewLink(Path.GetFileName(path), 
-                            cc.Range.Hyperlinks[1].Address);
-                    }
-                });
-            }
-            
+            Globals.ThisAddIn.uploadLink(paths);
         }
 
         private void deleteAll_Click(object sender, RibbonControlEventArgs e)
@@ -54,6 +37,12 @@ namespace embedInFile
             //Test write and retrieve
         }
 
+        /// <summary>
+        /// Opens an OpenFileDialog and returns an array of the absolute paths 
+        /// to the files that the user has selected. If the user didn't select any file,
+        /// it returns null.
+        /// </summary>
+        /// <returns></returns>
         private string[] selectFiles()
         {
             OpenFileDialog d = new OpenFileDialog();
@@ -78,15 +67,6 @@ namespace embedInFile
             }
         }
 
-        public IDriveConnection getDriveEmbedding()
-        {
-            if (driveEmbedding == null)
-            {
-                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
-            }
-            return driveEmbedding;
-        }
-
         private void listAllLinks_Click(object sender, RibbonControlEventArgs e)
         {
             Globals.ThisAddIn.listAllLinks();
@@ -94,20 +74,12 @@ namespace embedInFile
 
         private void listFiles_Click(object sender, RibbonControlEventArgs e)
         {
-            if (driveEmbedding == null)
-            {
-                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
-            }
-            driveEmbedding.listFiles();
+            Globals.ThisAddIn.listFiles();
         }
 
         private void deleteSelected_Click(object sender, RibbonControlEventArgs e)
         {
-            if (driveEmbedding == null)
-            {
-                driveEmbedding = new DriveEmbedding(Globals.ThisAddIn.getClickOnceLocation());
-            }
-            driveEmbedding.removeLink(Globals.ThisAddIn.Application.Selection.FormattedText.Text);
+            Globals.ThisAddIn.deleteSelected();
         }
 
         private void listAssembly_Click(object sender, RibbonControlEventArgs e)
@@ -122,6 +94,33 @@ namespace embedInFile
             Uri uriCodeBase = new Uri(assemblyInfo.CodeBase);
             string ClickOnceLocation = Path.GetDirectoryName(uriCodeBase.LocalPath.ToString());
             Globals.ThisAddIn.sayWord(ClickOnceLocation+"\r\n");
+        }
+
+        private void AddProperty_Click(object sender, RibbonControlEventArgs e)
+        {
+            DialogResult res = MessageBox.Show("Property?", "Property", MessageBoxButtons.YesNo);
+            Globals.ThisAddIn.addStringProperty("Test", (res == DialogResult.Yes ? "Yes" : "No"));
+        }
+
+        private void ListProperties_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.listProperties();
+        }
+
+        private void AddCC_Click(object sender, RibbonControlEventArgs e)
+        {
+            Tools.ContentControl cc = Globals.ThisAddIn.createDriveContentControl();
+            Globals.ThisAddIn.sayWord("ID: " + cc.ID);
+        }
+
+        private void Button1_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.addObjectVariable();
+        }
+
+        private void ListVariables_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.listVariables();
         }
     }
 }
