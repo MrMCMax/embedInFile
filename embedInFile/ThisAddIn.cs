@@ -50,6 +50,7 @@ namespace embedInFile
             this.Application.DocumentBeforeSave += Application_DocumentBeforeSave;
             this.Application.DocumentBeforeClose += Application_DocumentBeforeClose;
             this.Application.DocumentOpen += Application_DocumentOpen;
+
             
         }
 
@@ -92,10 +93,12 @@ namespace embedInFile
                 started.Remove(docID);
             }
             */
+            MessageBox.Show("Close event");
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
+            MessageBox.Show("Shutdown event");
         }
 
         private void Application_DocumentBeforeSave(Word.Document Doc, ref bool SaveAsUI, ref bool Cancel)
@@ -103,6 +106,7 @@ namespace embedInFile
             //Due to the primitive operation of properties, we can't just append to the list of links,
             //we have to re-write it entirely. The dictionary that contains the full updated list of links is
             //ccToLinks, so we call a write on it.
+            MessageBox.Show($"Save event: ui:{SaveAsUI}, cancel:{Cancel}");
             saveLinks();
         }
 
